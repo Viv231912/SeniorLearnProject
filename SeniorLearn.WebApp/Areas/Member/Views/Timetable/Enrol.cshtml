@@ -1,0 +1,293 @@
+﻿@model SeniorLearn.WebApp.Areas.Member.Models.Timetable.Calendar
+@{
+    ViewData["Title"] = "Enrol";
+}
+
+<div class="container-fluid">
+    <h4 class="">Upcoming Lessons for Enrol</h4>
+
+    @if (ViewData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-dark">
+            @ViewData["ErrorMessage"]
+        </div>
+    }
+    else
+    {
+        <div id="error-message" class="alert alert-dark" style="display:none;"></div>
+        <form method="post" asp-action="Enrol">
+            <input type="hidden" asp-for="MemberId" />
+            <input type="hidden" asp-for="ProfessionalId" />
+
+            <table class="table" id="lessonsTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Start</th>
+                        <th>Finish</th>
+                        <th>Class Duration (In Minutes)</th>
+                        <th>IsCourse</th>
+                        @* <th>Delivery Method</th> *@
+
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="lessons-body">
+                    @* @foreach (var item in Model.Lessons!)
+                {
+                <tr>
+                <td>@item.Name</td>
+                <td>@item.Description</td>
+                <td>@item.Start</td>
+                <td>@item.Finish</td>
+                <td>@item.ClassDurationInMinutes</td>
+                <td>@item.DeliveryMode</td>
+
+                <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#enrolModal" data-lesson-id="@item.Id" data-lesson-name="@item.Name" onclick="openEnrolModal('@item.Id')">Enrol</button>
+                </td>
+                </tr>
+                } *@
+                </tbody>
+            </table>
+        </form>
+    }
+    <div class="modal fade" id="enrolModal" tabindex="-1" role="dialog" aria-labelledby="enrolModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="enrolModalLabel">Enrol in Lesson</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!--lesson details-->
+                    <div id="lessonDetails"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="enrol-submit">Enrol</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/js/member.timetable.enrol.js"></script>
+}
+
+
+
+
+
+@* @section Scripts {
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        $(() => {
+            const professionalId = parseInt($('#ProfessionalId').val());
+            const lessonsTable = $('#lessons-body');
+
+            // Function to fetch lessons from the API
+            async function fetchLessons(start, end) {
+                try {
+                    const response = await fetch(`/api/timetable/lessons?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return await response.json();
+                } catch (error) {
+                    console.error('Error loading lessons:', error);
+                    return [];
+                }
+            }
+
+            // Function to render lessons in the table
+            async function renderLessons() {
+                const start = new Date().toISOString();
+                const end = new Date(new Date().setDate(new Date().getDate() + 7)).toISOString();
+
+                const lessons = await fetchLessons(start, end);
+                lessonsTable.empty();
+                lessons.forEach(lesson => {
+                    const row = `
+                                <tr data-lesson-id="${lesson.id}">
+                                    <td>${lesson.title}</td>
+                                    <td>${lesson.description}</td>
+                                    <td>${new Date(lesson.start).toLocaleString()}</td>
+                                    <td>${new Date(lesson.end).toLocaleString()}</td>
+                                    <td>${lesson.classDurationInMinutes}</td>
+                                    <td>${lesson.isCourse}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary" onclick="openEnrolModal(${lesson.id})">Enrol</button>
+                                    </td>
+                                </tr>
+                            `;
+                    lessonsTable.append(row);
+                });
+            }
+
+            // Function to open the enrol modal
+            window.openEnrolModal = async function (lessonId) {
+                try {
+                    const lessonResponse = await fetch(`/api/timetable/lessons/${lessonId}`);
+                    if (!lessonResponse.ok) {
+                        throw new Error(`HTTP error! Status: ${lessonResponse.status}`);
+                    }
+                    const lesson = await lessonResponse.json();
+
+                    $('#lessonDetails').text(`Details for lesson ID: ${lesson.id}`);
+
+                    if (lesson.enrolment) {
+                        $('#lessonDetails').append('<p>You are already enrolled in this lesson :)</p>');
+                        $('#enrol-submit').hide();
+                    } else {
+                        $('#enrol-submit').show().off('click').on('click', () => enrolInLesson(lessonId, lesson.isCourse));
+                    }
+
+                    $('#enrolModal').modal('show');
+                } catch (error) {
+                    console.error('Error opening enrol modal:', error);
+                    alert('Error opening enrol modal');
+                }
+            }
+
+            // Function to handle enrolling in a lesson
+            async function enrolInLesson(lessonId, isCourse) {
+                try {
+                    console.log(`Enrolling in lesson ID: ${lessonId}`);
+                    const response = await fetch(`/api/timetable/lessons/${lessonId}/enrol`, { method: 'POST' });
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    const result = await response.json();
+                    console.log('Enrolment response:', result); // Log the response
+                    if (result && Object.keys(result).length > 0) {
+                        // Display notification message for course enrollment
+                        if (isCourse) {
+                            alert('NOTE: This lesson belongs to a course and you will automatically be enrolled in all lessons that are part of the course. You are also expected to attend all lessons for the course');
+                        }
+                        // Display success message and close modal
+                        alert("You have enrolled in the lesson");
+                        $('#enrolModal').modal('hide');
+                        renderLessons(); // Refresh the lesson list
+                    } else {
+                        throw new Error('Empty response or invalid JSON');
+                    }
+                } catch (error) {
+                    console.error('Error enrolling in lesson:', error);
+                    alert('Error enrolling in lesson');
+                }
+            }
+
+            // Initial rendering of lessons
+            renderLessons();
+
+            // Close modal handler
+            $('#enrol-close').on('click', () => $('#enrolModal').modal('hide'));
+        });
+    </script>
+} *@
+
+
+
+
+
+
+@* @section Scripts {
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+
+    <script>
+        $(() => {
+            const professionalId = parseInt($('#ProfessionalId').val());
+            const lessonsTable = $('#lessons-body');
+
+            // Function to fetch lessons from the API
+            async function fetchLessons(start, end) {
+                try {
+                    const response = await fetch(`/api/timetable/lessons?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return await response.json();
+                } catch (error) {
+                    console.error('Error loading lessons:', error);
+                    return [];
+                }
+            }
+
+            // Function to render lessons in the table
+            async function renderLessons() {
+                const start = new Date().toISOString();
+                const end = new Date(new Date().setDate(new Date().getDate() + 7)).toISOString();
+
+                const lessons = await fetchLessons(start, end);
+                lessonsTable.empty();
+                lessons.forEach(lesson => {
+                    const row = `
+                        <tr data-lesson-id="${lesson.id}">
+                            <td>${lesson.title}</td>
+                            <td>${lesson.description}</td>
+                            <td>${new Date(lesson.start).toLocaleString()}</td>
+                            <td>${new Date(lesson.end).toLocaleString()}</td>
+                            <td>${lesson.classDurationInMinutes}</td>
+                            <td>${lesson.isCourse}</td>
+                            <td>
+                                <button type="button" class="btn btn-primary" onclick="openEnrolModal(${lesson.id})">Enrol</button>
+                            </td>
+                        </tr>
+                    `;
+                    lessonsTable.append(row);
+                });
+            }
+
+            // Function to handle enrolling in a lesson
+            async function enrolInLesson(lessonId) {
+                try {
+                    const response = await fetch(`/api/timetable/lessons/${lessonId}/enrol`, { method: 'POST' });
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    const result = await response.json();
+                    console.log('Enrolment response:', result); // Log the response
+                    if (result && Object.keys(result).length > 0) {
+                        // Display notification message for course enrollment
+                        if (result.isCourse) {
+                            alert('NOTE: This lesson belongs to a course and you will automatically be enrolled in all lessons that are part of the course. You are also expected to attend all lessons for the course');
+                        }
+                        // Display success message and close modal
+                        alert("You have enrolled in the lesson");
+                        $('#enrolModal').modal('hide');
+                        renderLessons(); // Refresh the lesson list
+                    } else {
+                        throw new Error('Empty response or invalid JSON');
+                    }
+                } catch (error) {
+                    console.error('Error enrolling in lesson:', error);
+                    alert('Error enrolling in lesson');
+                }
+            }
+
+
+            // Initial rendering of lessons
+            renderLessons();
+
+            // Close modal handler
+            $('#enrol-close').on('click', () => $('#enrol-modal').modal('hide'));
+        });
+
+
+    </script>
+} *@

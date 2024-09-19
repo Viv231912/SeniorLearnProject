@@ -1,0 +1,27 @@
+﻿@model SeniorLearn.WebApp.Areas.Administration.Models.Member.Manage
+
+
+
+
+<div class="col-4">
+    <div class="d-flex flex-column justify-content-between">
+
+
+        @foreach (var role in Model.Roles.OrderBy(r => r.Order))
+        {
+            <div class="p-1">
+
+                <div class="role-history p-1 border" style=" text-align:left">
+                    @foreach (var u in role.Updates)
+                    {
+                        <div class="d-flex flex-column border mb-1 p-1">
+                            <span><strong>Timestamp:@u.Timestamp </strong></span>
+                            <span>@u.Notes</span>
+                        </div>
+
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>

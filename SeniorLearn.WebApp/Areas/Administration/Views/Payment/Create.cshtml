@@ -1,0 +1,76 @@
+﻿@model SeniorLearn.WebApp.Areas.Administration.Models.Payment.Create
+
+@{
+    ViewData["Title"] = "Create Payment";
+}
+
+
+<div class="container-fluid">
+    <div class="card border-0" style="width:100%;">
+        <div class="card-header border-0">
+            <div class="card-title">
+                <h1 >Record Payments</h1>
+            </div>
+        </div>
+       
+        <div class="card-body" style="width:100%;">
+            <div class="d-flex">
+                <div class="col-12">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="form-group">
+                            <label asp-for="MediaTypeId" class="control-label">Payment Method: </label>
+                            <select asp-for="MediaTypeId" asp-items="@Model.MediaTypes" class="form-select">
+                            </select>
+                        </div>
+
+                        <div class="form-group ">
+                            <label asp-for="Amount" class="control-label">Amount: </label>
+                            <input asp-for="Amount" class="form-control" />
+                            <span asp-validation-for="Amount" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group cheque" style="display:none">
+                            <div class="d-flex align-middle mt-2">
+                                <label asp-for="Cleared" class="control-label d-inline-block" style="padding-right:5px">Cleared: </label>
+                                <input asp-for="Cleared" type="checkbox" class="form-check d-inline" />
+                                <span asp-validation-for="Cleared" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group credit" style="display:none">
+                            <label asp-for="CardIssuer" class="control-label"> </label>
+                            <input asp-for="CardIssuer" class="form-control" />
+                            <span asp-validation-for="CardIssuer" class="text-danger"></span>
+                        </div>
+                        <div class="form-group credit" style="display:none">
+                            <label asp-for="AuthorisationNumber" class="control-label"> </label>
+                            <input asp-for="AuthorisationNumber" class="form-control" />
+                            <span asp-validation-for="AuthorisationNumber" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group eft" style="display:none">
+                            <label asp-for="ReferenceNumber" class="control-label"></label>
+                            <input asp-for="ReferenceNumber" class="form-control" />
+                            <span asp-validation-for="ReferenceNumber" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex mt-3">
+                            <input type="submit" class="btn btn-primary w-50" value="Create Payment" />
+                            <a asp-action="Index" class="btn btn-secondary w-50" style="margin-left: 5px;">Back</a>
+                        </div>
+                        <input type="hidden" asp-for="MemberId" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+  @section Scripts {
+        <script src="~/js/administration.payment.create.js"></script>
+    }

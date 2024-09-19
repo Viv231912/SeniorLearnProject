@@ -1,0 +1,60 @@
+﻿@model IEnumerable<SeniorLearn.WebApp.Data.Payment>
+
+
+@{
+    ViewData["Title"] = "Payments";
+}
+
+
+<div class="container-fluid mt-5">
+    <div class="card" style="width:auto;">
+        <div class="card-body" >
+            <div class="row align-content-center">
+                <div class="col-12 pe-5">
+                    <div>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Payment Date</th>
+                                    <th>Payment Method</th>
+                                    <th>Payment Amount</th>
+                                    <th>Approved</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var p in Model)
+                                {
+                                    <tr>
+                                        <td>@p.PaymentDate.ToShortDateString()</td>
+                                        <td>@p.Media</td>
+                                        <td>@p.Amount</td>
+                                        <td>@p.Approved</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                    <div class="row text-center mt-5">
+                        <div class="col-12 col-md-4 mb-2 mb-md-0">
+                           
+                            <a asp-controller="Payment" asp-action="Create" asp-route-id="@ViewBag.MemberId" class="btn btn-primary w-100">Create Payment</a>
+                        </div>
+                        <div class="col-12 col-md-4 mb-2 mb-md-0">
+                            <a asp-action="Search" asp-route-id="@ViewBag.MemberId" class="btn btn-primary w-100">Search Payment</a>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <a asp-action="Index" asp-controller="Member" class="btn btn-secondary w-100">Back</a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+

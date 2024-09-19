@@ -1,0 +1,87 @@
+﻿
+@model SeniorLearn.WebApp.Areas.Identity.Pages.Account.LoginModel.InputModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container-lg">
+    <div class="row justify-content-center align-items-center">
+        @if (User.Identity!.IsAuthenticated)
+        {
+            <div class="col-md-6">
+                @if (User.IsInRole("ADMINISTRATION"))
+                {
+                    <div>
+                        <h3>Welcome,Back Admin!</h3>
+                        <p>You are already logged in. Go to your <a asp-area="Administration" asp-controller="Home" asp-action="Index">Admin page</a>.</p>
+                    </div>
+                }
+                else
+                {
+                    <div>
+                        <h3>Welcome,Back!</h3>
+                        <p>You are already logged in. Go to your <a asp-area="Member" asp-controller="Home" asp-action="Index">Lessons page</a>.</p>
+                    </div>
+                }
+                
+            <div>
+                <img class="img-fluid" src="~/images/senior-learn-logo.png"/>
+            </div>
+            </div>
+
+        }
+        else
+        {
+         <div class="text-center">
+        <h3 class="mb-3">Welcome to Senior Learn! </h3>
+        
+    </div>   
+        
+        <div class="col-md-5 text-center text-md-start">
+            <div >
+                <img class="img-fluid" src="~/images/senior-learn-logo.jpg" />
+            </div>       
+        </div>
+
+        <div class="col-md-4 text-center d-md-block">
+            <div>
+                <section>
+                    <form id="account" method="post" asp-area="Identity" asp-page="/Account/Login">
+                        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                        <div class="form-floating mb-3">
+                            <input asp-for="Email" class="form-control" autocomplete="username" aria-required="true" placeholder="username@email.com"/>
+                                <label asp-for="Email" class="form-label" style="display:flex; align-items:center; "><i class="bi bi-envelope-fill" style="margin-right: 10px; font-size:16px"></i>Email </label>
+                                <span asp-validation-for="Email" class="text-danger" style="display:block;"></span>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input asp-for="Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
+                                <label asp-for="Password" class="form-label" style="display:flex; align-items:center; justify-content:center;"><i class="bi bi-lock-fill" style="margin-right:10px; font-size:16px"></i>Password</label>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="checkbox mb-3 align-s">
+                            <label asp-for="RememberMe" class="form-label">
+                                <input class="form-check-input" asp-for="RememberMe" />
+                                @Html.DisplayNameFor(m => m.RememberMe)
+                            </label>
+                        </div>
+                        <div class="container d-inline-flex justify-content-between">
+                                <button id="login-submit" type="submit" class="w-50 btn btn-lg btn-primary" style="background-color:#113D50">Log in</button>
+                            <button class="btn btn-link p-0 m-0 ">FORGOT PASSWORD?</button>
+                        </div>
+                        
+                    </form>
+                </section>
+
+               
+            </div>
+        </div>
+        
+        }
+    </div>
+  
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

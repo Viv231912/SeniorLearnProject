@@ -1,0 +1,48 @@
+﻿@model SeniorLearn.WebApp.Areas.Administration.Models.Member.Register
+
+@{
+    ViewData["Title"] = "Member";
+}
+
+<div class="container-fluid">
+    <div class="card border-0 mt-3" style="width:auto;">
+        <div class="card-title p-4">
+            <h1>Register Member</h1>
+        </div>
+        <div class="card-body">
+
+            <form asp-action="Register">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="FirstName" class="control-label">Given Name</label>
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="LastName" class="control-label">Surname</label>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label">Email</label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="d-flex mt-3 justify-content-center">
+                    <div class="col-10 col-md-5">
+
+                        <input type="submit" value="Register Member" class="btn btn-primary w-100" />
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+
+</div>
+
+

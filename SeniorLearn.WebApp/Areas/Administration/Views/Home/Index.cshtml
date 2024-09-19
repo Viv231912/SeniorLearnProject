@@ -1,0 +1,64 @@
+﻿@model IEnumerable<SeniorLearn.WebApp.Data.Member>
+
+
+@{
+    ViewData["Title"] = "Home";
+    Layout = "_Layout";
+}
+
+
+
+<div class="container-fluid">
+    <div class="mb-3 mt-3">
+        <h4>Admin Dashboard</h4>
+
+        <div class="card border-0" style="width:auto">
+            <div class="card-body">
+                <h5 class="card-title">
+                    Member List
+                </h5>
+
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Member ID</th>
+                            <th>Surname</th>
+                            <th>Given Name</th>
+                            <th>Email</th>
+                            <th>Date Of Birth</th>
+                            <th>Renewal Date</th>
+                            <th>Outstanding Fee</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var m in Model)
+                        {
+                            <tr>
+                                <td>@m.Id</td>
+                                <td>@m.FirstName</td>
+                                <td>@m.LastName</td>
+                                <td>@m.Email</td>
+                                <td>@m.DateOfBirth</td>
+                                <td>@m.RenewalDate.ToShortDateString()</td>
+                                <td>@m.OutstandingFees</td>
+                                <td>
+                                    <a asp-action="Manage" asp-route-id="@m.Id" asp-controller="Member">
+                                        <i class="bi bi-pencil-square">
+                                            <span>Manage</span>
+                                        </i>
+                                    </a>
+                                    @* <a asp-action="Index" asp-controller="Payment" asp-route-id="@m.Id">Payments</a> *@
+
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+

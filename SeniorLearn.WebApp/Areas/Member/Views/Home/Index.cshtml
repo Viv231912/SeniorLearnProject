@@ -1,0 +1,69 @@
+﻿@model Member
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div>
+    <div class="alert alert-primary" role="alert">Enrolments: @Model.Enrolments.Count</div>
+
+    @{
+        var courseEnrolments = Model.Enrolments
+            .GroupBy(e => e.Lesson.DeliveryPattern)
+            .ToList();
+    }
+
+    @* using card *@
+
+    @* @foreach (var lesson in courseEnrolments)
+    {
+        @foreach (var enrolment in lesson)
+        {
+            <div class="card >
+                <div class="card-body">
+                    <h5 class="card-title">@enrolment.Lesson.Name</h5>
+                    <p class="card-text">
+                        <div><strong>Start:</strong>@enrolment.Lesson.Start</div>
+                        <strong>Finish:</strong>@enrolment.Lesson.Finish <br />
+                        <strong>Status:</strong>@enrolment.Lesson.StatusType <br />
+                        <strong>Delivery Mode:</strong>@enrolment.Lesson.DeliveryMode <br />
+                        <strong>Course:</strong>@(enrolment.Lesson.DeliveryPattern.IsCourse ? "Yes" : "No" )<br />
+
+                    </p>
+                </div>
+             
+        }
+    } *@
+
+
+
+    @* using table *@
+    @foreach(var lesson in courseEnrolments)
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Lesson</th>
+                    <th>Start</th>
+                    <th>Finish</th>
+                    <th>Status</th>
+                    <th>Delivery Mode</th>
+                    <th>IsCourse</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var enrolments in lesson.OrderBy(e => e.Lesson.Start))
+                {
+                    <tr>
+                        <td>@enrolments.Lesson.Name</td>
+                        <td>@enrolments.Lesson.Start</td>
+                        <td>@enrolments.Lesson.Finish</td>
+                        <td>@enrolments.Lesson.StatusType</td>
+                        <td>@enrolments.Lesson.DeliveryMode</td>
+                        <td>@(enrolments.Lesson.DeliveryPattern.IsCourse ? "Yes" : "No")</td>
+                    </tr>    
+                }
+            </tbody>
+        </table>    
+    }
+</div>

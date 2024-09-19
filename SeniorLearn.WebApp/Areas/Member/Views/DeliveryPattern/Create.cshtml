@@ -1,0 +1,123 @@
+﻿@model SeniorLearn.WebApp.Areas.Member.Models.DeliveryPattern.Create
+
+@{
+    ViewData["Title"] = "Create Delivery Pattern";
+}
+
+<div class="border shadow p-5">
+    <form asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <strong style="color:midnightblue">Register Delivery Pattern (Plan)<hr class="my-1"/></strong>
+        <div class="form-group">
+            <label asp-for="Name" class="form-label">Pattern Name:</label>
+            <input asp-for="Name" class="form-control"/>
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="StartOn" class="form-label">Start Time:</label>
+            <input asp-for="StartOn" class="form-control" />
+            <span asp-validation-for="StartOn" class="text-danger"></span>
+        </div>
+       
+        <div class="form-group">
+            <label asp-for="DeliveryModeId" class="form-label"></label>
+            <select asp-for="DeliveryModeId" asp-items="@Model.DeliveryModes" class="form-select"></select>
+        </div>
+
+        <div class="form-group delivery-location" style="display: none">
+            <label asp-for="Location" class="form-label"></label>
+            <input asp-for="Location" class="form-control" />
+            <span asp-validation-for="Location" class="text-danger"></span>
+        </div>
+
+        <div class="form-group delivery-url" style="display: none">
+            <label asp-for="Url" class="form-label"> Meeting Link:</label>
+            <input asp-for="Url" class="form-control" />
+            <span asp-validation-for="Url" class="text-danger"></span>
+        </div>
+
+        <label class="initialize-lessons w-100 p-2 border m-2 mt-2 ">
+            <input class="form-check-input" asp-for="Initialize"/>
+            <span>Initialize (generate &amp; schedule lessons)</span>
+        </label>
+
+        <div class="lesson-template p-3 border my-2 shadow" style="display:none">
+            <strong style="color:midnightblue">Lesson Template<hr class="my-1"/></strong>
+            <div class="form-group">
+                <label asp-for="Template!.Name" class="form-label"></label>
+                <input asp-for="Template!.Name" class="form-control"/>
+                <span asp-validation-for="Template!.Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Template!.Description" class="form-label"></label>
+                <input asp-for="Template!.Description" class="form-control" />
+                <span asp-validation-for="Template!.Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Template!.ClassDurationInMinutes" class="form-label">Duration (In Minutes)</label>
+                <input asp-for="Template!.ClassDurationInMinutes" class="form-control" />
+                <span asp-validation-for="Template!.ClassDurationInMinutes" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Template!.TopicId" class="form-label">Topic</label>
+                <select asp-for="Template!.TopicId" asp-items="Model.Template!.Topics" class="form-control"></select>
+                <span asp-validation-for="Template!.TopicId" class="text-danger"></span>
+            </div>
+        </div>
+
+            <label class="repeating w-100 p-2 border my-2" style="display:none">
+                <input class="form-check-input" asp-for="IsCourse"/>
+                <span>Is Course</span>
+            </label>
+
+            @* Repeating *@
+            <div class="form-group">
+                <label asp-for="StartOn" class="form-label">Repeat:</label>
+                <select asp-for="PatternType" class="form-control form-select">
+                    <option value="0">None</option>
+                    <option value="1">Daily</option>
+                    <option value="2">Weekly</option>
+                </select>
+            </div>
+
+        <div class="repeating" style="display:none">
+            <div class="recurrence">
+                <div class="flex p-2">
+                    <input type="radio" asp-for="EndStrategyId" value="1" class="mr-3"/>
+                    <label asp-for="Occurences" class="form-label d-inline">
+                        <input asp-for="Occurences" class="form-control d-inline" style="width:75px; margin-right:5px;" />Times
+                    </label>
+                    <span asp-validation-for="Occurences" class="text-danger"></span>
+                </div>
+                <div class="flex p-2">
+                    <input type="radio" asp-for="EndStrategyId" value="2" />
+                    <label asp-for="EndOn" class="form-label d-inline">
+                        <input asp-for="EndOn" class="form-control d-inline" style="max-width:200px; margin-right:5px;" />Until
+                    </label>
+                    <span asp-validation-for="EndOn" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="week-days text-uppercase mt-2 border p-2">
+                <label class="mx-1" ><input class="form-check-input mx-2" asp-for="Sunday" />Sun</label>
+                <label class="mx-1"><input class="form-check-input mx-2" asp-for="Monday" />Mon</label>
+                <label class="mx-1"><input class="form-check-input mx-2" asp-for="Tuesday" />Tue</label>
+                <label class="mx-1"><input class="form-check-input mx-2" asp-for="Wednesday" />Wed</label>
+                <label class="mx-1"><input class="form-check-input mx-2" asp-for="Thursday" />Thur</label>
+                <label class="mx-1"><input class="form-check-input mx-2" asp-for="Friday" />Fri</label>
+                <label class="mx-1"><input class="form-check-input mx-2" asp-for="Saturday" />Sat</label>
+            </div>
+        </div>
+        <div class="form-group mt-5">
+            <input type="submit" value="Save" class="btn btn-primary w-100" />
+        </div>
+
+    </form>
+</div>
+
+@section Scripts{
+    <script src="~/js/member.deliverypattern.create.js"></script>
+}

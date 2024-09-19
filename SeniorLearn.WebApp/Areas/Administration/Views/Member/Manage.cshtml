@@ -1,0 +1,217 @@
+﻿@model SeniorLearn.WebApp.Areas.Administration.Models.Member.Manage
+@inject SeniorLearn.WebApp.Services.Member.MemberService MemberService
+
+
+@{
+    ViewData["Title"] = "Member";
+    Layout = "_Layout";
+}
+
+
+
+<div class="card mb-0">
+    <div class="card-header">
+        <h5 class="card-title">Member Details</h5>
+    </div>
+    <div class="card-body">
+        <form asp-action="Manage">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label">Given Name</label>
+                <input asp-for="FirstName" class="form-control" id="FirstNameField" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label">Surname</label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div><div class="form-group">
+                <label asp-for="DateOfBirth" class="control-label">Date Of Birth</label>
+                <input asp-for="DateOfBirth" class="form-control" />
+                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RenewalDate" class="control-label">Renewal Date</label>
+                <input asp-for="RenewalDate" class="form-control" />
+                <span asp-validation-for="RenewalDate" class="text-danger field-va"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OutstandingFees" class="control-label">Outstanding Fees</label>
+                <input asp-for="OutstandingFees" class="form-control" />
+                <span asp-validation-for="OutstandingFees" class="text-danger"></span>
+
+            </div>
+            <div class="d-flex my-3 justify-content-start">
+                <div class="col-6 col-md-3 mx-2">
+
+                    <input type="submit" value="Save" class="btn btn-primary w-100" style="background-color:#40798a; border:none;" />
+                </div>
+                <div class="col-6 col-md-3">
+
+                    <a asp-action="Index" class="btn btn-secondary w-100" style="border:none;">Back</a>
+                </div>
+            </div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Email" />
+        </form>
+
+        <div class="container-fluid">
+            <div class="card border-0" style="width:100%;">
+                <div class="card-header">
+                    <h5 class="card-title mt-3">Roles</h5>
+                </div>
+                <div class="card-body">
+                    <!--Standard -->
+                    <div class="d-flex align-content-center justify-content-between" style=" padding-bottom:1em;">
+                        <div class="d-flex align-items-center">
+
+                            <h5 class="mt-1" style="margin-right:1em">Membership</h5>
+                            @if (Model.IsActiveStandardMember)
+                            {
+                                <i class="bi bi-check-circle text-success ms-2" style="font-size:1.5rem; font-weight:bold"></i>
+                            }
+                            else
+                            {
+                                <i class="bi bi-x-circle text-danger ms-2" style="font-size:1.5rem"></i>
+                            }
+                        </div>
+                        <form class="d-flex align-items-center p-0 m-0" asp-action="UpdateStandardRole" asp-controller="Member">
+                            <input type="submit" value="@(Model.IsActiveStandardMember ? "Dea" : "A")ctivate Membership" class="btn @(Model.IsActiveStandardMember ? "btn-secondary" : "btn-primary")  w-100" />
+                            <input type="hidden" name="active" id="active" value="@(Model.IsActiveStandardMember ? 0 : 1)" />
+                            <input type="hidden" asp-for="Id" />
+                        </form>
+                    </div>
+
+                    <!--Professional-->
+                    <div class="d-flex align-content-center justify-content-between mt-4">
+
+                        <div class="d-flex align-items-center">
+
+                            <h5 class="mt-1" style="margin-right:1.2em;">Professional</h5>
+                            @if (Model.IsActiveProfessionalMember)
+                            {
+                                <i class="bi bi-check-circle text-success ms-2" style="font-size:1.5rem; font-weight:bold"></i>
+                            }
+                            else
+                            {
+                                <i class="bi bi-x-circle text-danger ms-2" style="font-size:1.5rem"></i>
+                            }
+                        </div>
+                        <form class="d-flex align-items-center p-0 m-0" asp-action="UpdateProfessionalRole" asp-controller="Member">
+                            <input type="submit" value="@(Model.IsActiveProfessionalMember ? "Dea" : "A")ctivate Professional Role" class="btn @(Model.IsActiveProfessionalMember ? "btn-secondary" : "btn-primary")  w-100" />
+                            <input type="hidden" name="active" id="active" value="@(Model.IsActiveProfessionalMember ? 0 : 1)" />
+                            <input type="hidden" asp-for="Id" />
+                        </form>
+                    </div>
+
+
+                    @if (!Model.IsActiveProfessionalMember)
+                    {
+
+
+                        <div class="d-flex align-content-center justify-content-end w-100 mt-3" style="font-weight:bold;  padding-bottom:1em;">
+                            <span class="d-flex align-content-center">
+                                <label>3 Months Trial</label>
+                                <input name="Renewal" type="radio" value="3" class="mx-1" />
+                            </span>
+                            <span class="d-flex align-content-center">
+                                <label style="margin-left:25px">Annual (12 months)</label>
+                                <input name="Renewal" type="radio" value="12" class="mx-1" />
+                            </span>
+                        </div>
+
+                    }
+
+                    <!--Honorary-->
+                    <div class="d-flex align-content-center justify-content-between mt-4" style=" padding-bottom:1em;">
+                        <div class="d-flex align-items-center">
+
+                            <h5 class="mt-1" style="margin-right:2.6em;">Honorary</h5>
+                            @if (Model.IsActiveHonoraryMember)
+                            {
+                                <i class="bi bi-check-circle text-success ms-2" style="font-size:1.5rem; font-weight:bold"></i>
+                            }
+                            else
+                            {
+                                <i class="bi bi-x-circle text-danger ms-2" style="font-size:1.5rem"></i>
+                            }
+                        </div>
+                        @if (!Model.IsActiveHonoraryMember)
+                        {
+
+                            <form class=" p-1 m-1" asp-action="GrantHonoraryRole" asp-controller="Member">
+                                <input type="submit" value="Grant Honorary Role" class="btn btn-primary w-100" />
+                                <input type="hidden" asp-for="Id" />
+                            </form>
+
+                        }
+                    </div>
+                </div>
+            </div>
+            <div>
+                <!--Role History-->
+                <div class="accordion" id="accordionExample">
+                    <h5 class="m-3" >Role History</h5>
+                    @foreach (var role in Model.Roles.OrderBy(r => r.Order))
+                    {
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne-@role.Id" aria-expanded="false" aria-controls="collapseOne-@role.Id">
+                                    Role: @role.RoleType
+                                </button>
+                            </h2>
+                            <div id="collapseOne-@role.Id" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <div class="container-fluid">
+                                        @foreach (var u in role.Updates)
+                                        {
+                                            <div class="row mb-3">
+                                                <div class="col-12 col-md-6">
+                                                    <span class="mx-2">@u.Notes</span>
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <span style="margin-left: 5px"><strong>Timestamp:</strong> @u.Timestamp</span>
+                                                </div>
+                                                <br />
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get all accordion buttons
+            const accordionButtons = document.querySelectorAll('.accordion-button');
+
+            accordionButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    // Get the target collapse element
+                    const target = document.querySelector(this.getAttribute('data-bs-target'));
+
+                    // Toggle the 'show' class
+                    if (target.classList.contains('show')) {
+                        target.classList.remove('show');
+                        this.setAttribute('aria-expanded', 'false');
+                    } else {
+                        target.classList.add('show');
+                        this.setAttribute('aria-expanded', 'true');
+                    }
+                });
+            });
+        });
+    </script>
+}

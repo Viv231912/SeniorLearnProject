@@ -1,0 +1,63 @@
+﻿@model SeniorLearn.WebApp.Data.DeliveryPattern
+
+@{
+    ViewData["Title"] = "Lessons";
+}
+
+
+<div>
+    <h3>Lessons: @Model.Name</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                @* <th>Id</th> *@
+                <th>Name</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Duration (Minutes)</th>
+                <th>Mode</th>
+                <th>Topic</th>
+                <th>Status</th>
+                <th>Number of Enrolments</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var l in Model.Lessons)
+            {
+                <tr>
+                    @* <td>@l.Id</td> *@
+                    <td>@l.Name</td>
+                    <td>@l.Start.ToLongDateString() @l.Start.ToShortTimeString()</td>
+                    <td>@l.Finish</td>
+                    <td>@l.ClassDurationInMinutes</td>
+                    <td>@l.DeliveryMode</td>
+                    <td>@l.Topic.Name</td>
+                    <td>@l.StatusType</td>
+                    <td>@l.Enrolments.Count</td>
+                    <td>
+                        @foreach (var status in l.ValidTransitions)
+                        {
+                            switch (status)
+                            {
+                                case Lesson.Statuses.Scheduled:
+                                    <form asp-action="OpenLesson">
+                                    <input type="hidden" name="Id" id="Id" value="@l.Id"/>
+                                    <input type="submit" value="Open"/>
+                                    </form>
+                                    break;
+                                    case Lesson.Statuses.Closed:
+                                    <form asp-action="CloseLesson">
+                                        <input type="hidden" name="Id"  id="Id" value="@l.Id"/>
+                                        <input type="submit" value="Close"/>
+                                    </form>
+                                    break;
+
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

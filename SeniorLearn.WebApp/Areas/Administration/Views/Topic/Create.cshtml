@@ -1,0 +1,47 @@
+﻿@model SeniorLearn.WebApp.Areas.Administration.Models.Topic.Create
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="container-fluid">
+    <div class="mb-3">
+        <h4>Create Topic</h4>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group col-auto">
+                    <label asp-for="Name" class="form-label"></label>
+                    <input asp-for="Name" class="form-control"/>
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group col-auto">
+                    <label asp-for="Description" class="form-label"></label>
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+               
+                <div class="d-grid gap-2 d-md-flex justify-content-start mt-3">
+                    <div class="col-auto">
+                        <input type="submit" value="Create" class="btn btn-primary px-4" />
+                    </div>
+                    <div class="col-auto">
+                        <a class="btn btn-secondary " asp-action="Index">Back to List</a>
+                    </div>
+                    <input type="hidden" asp-for="Organisation" value="@ViewBag.Organisation" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+   
+
+</div>
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

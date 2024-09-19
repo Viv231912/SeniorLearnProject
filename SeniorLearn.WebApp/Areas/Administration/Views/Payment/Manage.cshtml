@@ -1,0 +1,38 @@
+﻿@model SeniorLearn.WebApp.Areas.Administration.Models.Payment.Manage
+
+@{
+    ViewData["Title"] = "Manage Payment";
+}
+
+<h1>Record Payments</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Manage">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="MediaTypeId" class="control-label">Payment Method: </label>
+                <select asp-for="MediaTypeId" asp-items="@Model.PaymentMediaTypes" class="form-select">
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="MediaTypeId" class="control-label">Payment Method: </label>
+                <select asp-for="MediaTypeId" asp-items="@Model.PaymentMediaTypes" class="form-select">
+                </select>
+            </div>
+
+            <div class="form-group ">
+                <label asp-for="Amount" class="control-label">Amount: </label>
+                <input asp-for="Amount" class="form-control" />
+                <span asp-validation-for="Amount" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-3">
+                <input type="submit" class="btn btn-primary w-auto" value="Create Payment" />
+            </div>
+            <input type="hidden" asp-for="MemberId" />
+        </form>
+    </div>
+</div>
