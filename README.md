@@ -18,7 +18,7 @@ The Senior Learn Project is a web application designed to facilitate learning an
 - Database: SQL Server
 - Authentication: JWT and bearer tokens
 - API: RESTful services
-<br/>
+
  
 ## Key Takeaways
 - Full-Stack Development Expertise: Gained hands-on experience in building a complete web application from scratch, including both frontend and backend development.
@@ -28,5 +28,7 @@ The Senior Learn Project is a web application designed to facilitate learning an
 - Database Management: Strengthened proficiency in designing and managing relational databases using SQL Server.
 - Team Collaboration: Worked closely with a team to ensure efficient project delivery while maintaining code quality and best practices.
 - Problem-Solving: Overcame challenges related to scalability, user experience, and security while adhering to project timelines.
+
+<br/>
 
 ![image](https://github.com/user-attachments/assets/cf09ffd8-b512-4b7e-b58c-afc4c6b486f5)
